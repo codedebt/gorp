@@ -80,8 +80,12 @@ func (d MySQLDialect) ToSqlType(val reflect.Type, maxsize int, isAutoIncr bool) 
 	 */
 	if maxsize < 256 {
 		return fmt.Sprintf("varchar(%d)", maxsize)
-	} else {
+	} else if maxsize < 65536 {
 		return "text"
+	} else if maxsize < 16777216 {
+		return "mediumtext"
+	} else {
+		return "longtext"
 	}
 }
 
